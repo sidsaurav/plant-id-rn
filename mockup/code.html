@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Home Screen - Plant AI</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#37ec13",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#132210",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-[#121811] dark:text-white">
+    <header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+        <div class="flex items-center p-4 pb-2 justify-between max-w-md mx-auto">
+            <div class="flex items-center gap-3">
+                <div
+                    class="size-10 shrink-0 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden border-2 border-primary">
+                    <div class="w-full h-full bg-center bg-no-repeat bg-cover" data-alt="Portrait of Alex with plants"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_gfSHcyU5Cx99hvEUqDPAuNaUESaf2I6k1Aa1jLgBHURecaJBBUj_gMjb5B92W_t5AspS_ieXrM3DsVqQTcegBujpzOa_QqKU4YiK3oR74tEX0IqSSsPQw3DTaDDCo3N78GlazoBgN4sQbkYHJUJmp24OWHLYEnTrM2Q4qeBJ_wQxX7N2w2ZMsSQjKnNytHpbw9vhT9AJedEnwU8560bvac-MttDFDedcqMvRIf8YREHCKRzRi8Q8pn08s4465vG2yYuT8ldB6_SS");'>
+                    </div>
+                </div>
+                <h2 class="text-[#121811] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Good
+                    Morning, Alex 🌿</h2>
+            </div>
+            <div class="flex gap-2">
+                <button
+                    class="flex size-10 items-center justify-center rounded-full bg-white dark:bg-[#1e311a] shadow-sm text-[#688961] dark:text-primary">
+                    <span class="material-symbols-outlined">military_tech</span>
+                </button>
+                <button
+                    class="flex size-10 items-center justify-center rounded-full bg-white dark:bg-[#1e311a] shadow-sm text-[#688961] dark:text-primary">
+                    <span class="material-symbols-outlined">settings</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-md mx-auto pb-32">
+        <section class="p-4 @container">
+            <div
+                class="flex flex-col items-stretch justify-start rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] bg-white dark:bg-[#1e311a] overflow-hidden">
+                <div class="w-full bg-center bg-no-repeat aspect-[16/9] bg-cover"
+                    data-alt="A lush green Monstera Deliciosa plant leaf"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB0HpmncvRHGTqr-rxfirnFCvf9nwWleIvXwrxzQDRD_ptbYOKOGNOxQtoMmpYM7GsCwP_ma1xNLmHXW7qjVvXiUx289Qd2AMucCAozmSANGpsTr6wIRCwGufsCXxMAYXRO9KH4nTlAMv8EPBnyXERqvp44A0lsqpDnrihE4Gz-5gfwCf_diZ2b-WhnpCP9G1eprwWr7WO5XdpLyTfd0jci0Z4EVGnQrAjNhopsmE2r8z_qG5-NPNoKGjVsIgREt2ylHrz8kp_7mCBn");'>
+                </div>
+                <div class="flex w-full flex-col items-stretch justify-center gap-1 p-5">
+                    <p class="text-primary text-xs font-bold leading-normal tracking-wider uppercase">Plant of the Day
+                    </p>
+                    <p class="text-[#121811] dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">
+                        Monstera Deliciosa</p>
+                    <div class="flex items-end gap-3 justify-between mt-1">
+                        <div class="flex flex-col">
+                            <p class="text-[#688961] dark:text-gray-300 text-sm font-normal leading-normal italic">"The
+                                Swiss Cheese Plant"</p>
+                        </div>
+                        <button
+                            class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-9 px-4 bg-primary text-[#121811] text-sm font-bold shadow-lg shadow-primary/20">
+                            <span>Learn More</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <nav class="px-4 mt-2">
+            <div class="flex border-b border-[#dde6db] dark:border-[#2a4425] gap-8">
+                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-[#121811] dark:text-white pb-3 pt-2"
+                    href="#">
+                    <p class="text-sm font-bold leading-normal tracking-[0.015em]">Collection</p>
+                </a>
+                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#688961] dark:text-gray-400 pb-3 pt-2"
+                    href="#">
+                    <p class="text-sm font-bold leading-normal tracking-[0.015em]">History</p>
+                </a>
+            </div>
+        </nav>
+        <section class="grid grid-cols-2 gap-4 p-4 mt-2">
+            <div class="flex flex-col gap-2">
+                <div class="relative w-full aspect-square bg-white dark:bg-[#1e311a] p-1 rounded-xl shadow-sm">
+                    <div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-lg"
+                        data-alt="Fiddle Leaf Fig plant in a white pot"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDEzhOm1WF6xQWlOb55r-w1TVZkgK-XySjqIu9zNSSSLE1U2pPY5Wr-uK5HdfQwhAzTzWIcP_XOn45dZmRjDWgXA7hnSQJsay2kjYcSLCH7qrGlqIRjxHqY4jTStLmKbb1nEwOaNgUNnMCJIW8DnssGLp3pZirRyr02-aJ-F2s6KyVEuAOC0ctGYmsQqHUvBuuTNoKkbBWkIwcQM7mzmRL_au2i9FbNKkKmJZUkFz_8EM2DYtAqN9gI510mVUoCHu6rsYmcJx68Hnsm");'>
+                    </div>
+                    <div class="absolute top-2 right-2 bg-primary/90 px-2 py-0.5 rounded-full">
+                        <p class="text-[#121811] text-[10px] font-bold">Oct 12</p>
+                    </div>
+                </div>
+                <div class="px-1">
+                    <p class="text-[#121811] dark:text-white text-sm font-bold leading-tight">Fiddle Leaf Fig</p>
+                    <p class="text-[#688961] dark:text-gray-400 text-xs font-normal">Indoor • Healthy</p>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2">
+                <div class="relative w-full aspect-square bg-white dark:bg-[#1e311a] p-1 rounded-xl shadow-sm">
+                    <div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-lg"
+                        data-alt="Snake Plant with tall green leaves"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDwMZ5-iPfEbmcYvdk6byMuqtbmo1ti7vWLpuiF3a4Tq6Pz5D5adTj_4lCZfpKTEqtRNhG20xaNF9_Cj96H__UJd1SSDNcA6chQStLovwISAfwfloc_AhlZ0BVDabldW-zgkXekCGQKaA3N4TEFxM3QU3-vZqoR4cPvoDTYaC8qr2SjSRvP63093dMXJuh7uL7-QUPqa3G-we8knVl8aGGklI0G6MgUKvPiwRMx7ZLJz7pvNXoJMBui3g1RWhHR0i1OoXFbhTS2yxL0");'>
+                    </div>
+                    <div class="absolute top-2 right-2 bg-primary/90 px-2 py-0.5 rounded-full">
+                        <p class="text-[#121811] text-[10px] font-bold">Oct 10</p>
+                    </div>
+                </div>
+                <div class="px-1">
+                    <p class="text-[#121811] dark:text-white text-sm font-bold leading-tight">Snake Plant</p>
+                    <p class="text-[#688961] dark:text-gray-400 text-xs font-normal">Studio • Thriving</p>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2">
+                <div class="relative w-full aspect-square bg-white dark:bg-[#1e311a] p-1 rounded-xl shadow-sm">
+                    <div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-lg"
+                        data-alt="Hanging Pothos plant with heart shaped leaves"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDXCZ79ybHVPbjVazo_AZ188rvIg_C7gGZrbxWdHyseWIbdU4-3BsNkEvdB3KbKZhYzVyPdHlXFwszTKZiGJWEl9h1jtDYSUi03FUiHwqXjV1TBuLPty-DR3Mv7gEkaPB1y7laBlw0edhxoMWWPT_HkxRlu8CIhg-rCGAzRbdlf6VtjtdukfwCbrn5XMwldUrCGSIj64popLeI3qDmngU5Lw214UGXrFPJGFwCHsrPz476dIhN5zdqYAE04iHHO_HkzP1mEUf6CPsLv");'>
+                    </div>
+                    <div class="absolute top-2 right-2 bg-primary/90 px-2 py-0.5 rounded-full">
+                        <p class="text-[#121811] text-[10px] font-bold">Oct 08</p>
+                    </div>
+                </div>
+                <div class="px-1">
+                    <p class="text-[#121811] dark:text-white text-sm font-bold leading-tight">Pothos</p>
+                    <p class="text-[#688961] dark:text-gray-400 text-xs font-normal">Kitchen • Growing</p>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2">
+                <div class="relative w-full aspect-square bg-white dark:bg-[#1e311a] p-1 rounded-xl shadow-sm">
+                    <div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-lg"
+                        data-alt="Small Aloe Vera plant in a terracotta pot"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDTGPGl26ugebGKfncvy-2knO38jXXes_Kg6LaxUKljtc9--Rd175QXXo5kJgYceZKf0fEQOIZZb1lKGtDdvkOKBIK4ALTxl8Ez3cXS_7krRUNgBYR195m7mIDSyk_RFUbOGJr2r_y_oxSp5yvzB8J4QBso1vf5LS9YuLN3ZKngvYR5dXsRFQFbqsWCm5NCVMxzxIpcU7_XH958c8nG3AMWSUWKVbkn-5P3ma4mDg0S0YycqMkWW8Fdi9CjFbL5mjnekhsp_SSKDiQB");'>
+                    </div>
+                    <div class="absolute top-2 right-2 bg-primary/90 px-2 py-0.5 rounded-full">
+                        <p class="text-[#121811] text-[10px] font-bold">Oct 05</p>
+                    </div>
+                </div>
+                <div class="px-1">
+                    <p class="text-[#121811] dark:text-white text-sm font-bold leading-tight">Aloe Vera</p>
+                    <p class="text-[#688961] dark:text-gray-400 text-xs font-normal">Bedroom • Stable</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div
+        class="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-[#132210]/95 backdrop-blur-md border-t border-gray-200/50 dark:border-[#2a4425]/50 h-24 pb-8 z-50">
+        <div class="flex justify-around items-end h-full max-w-md mx-auto px-4">
+            <button class="flex flex-col items-center gap-1 text-primary transition-all pb-1">
+                <span class="material-symbols-outlined filled text-2xl">home</span>
+                <span class="text-[11px] font-bold uppercase tracking-wider">Home</span>
+            </button>
+            <div class="relative -top-3">
+                <button class="flex flex-col items-center gap-1 group">
+                    <div
+                        class="size-16 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/40 border-4 border-white dark:border-[#132210] group-active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined text-white text-3xl font-bold">photo_camera</span>
+                    </div>
+                    <span
+                        class="text-[11px] font-bold uppercase tracking-wider text-[#688961] dark:text-gray-400 mt-0.5">Scan</span>
+                </button>
+            </div>
+            <button class="flex flex-col items-center gap-1 text-[#688961] dark:text-gray-400 transition-all pb-1">
+                <span class="material-symbols-outlined text-2xl">explore</span>
+                <span class="text-[11px] font-bold uppercase tracking-wider">Explore</span>
+            </button>
+        </div>
+    </div>
+
+</body>
+
+</html>
