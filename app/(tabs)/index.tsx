@@ -1,0 +1,117 @@
+import { useState } from 'react';
+import { ScrollView, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
+
+import { Header } from '@/components/Header';
+import { PlantOfTheDay } from '@/components/PlantOfTheDay';
+import { TabSelector } from '@/components/TabSelector';
+import { PlantCard } from '@/components/PlantCard';
+
+// Mock data for the plants
+const PLANTS_DATA = [
+    {
+        id: '1',
+        name: 'Fiddle Leaf Fig',
+        location: 'Indoor',
+        status: 'Healthy',
+        imageUrl:
+            'https://lh3.googleusercontent.com/aida-public/AB6AXuDEzhOm1WF6xQWlOb55r-w1TVZkgK-XySjqIu9zNSSSLE1U2pPY5Wr-uK5HdfQwhAzTzWIcP_XOn45dZmRjDWgXA7hnSQJsay2kjYcSLCH7qrGlqIRjxHqY4jTStLmKbb1nEwOaNgUNnMCJIW8DnssGLp3pZirRyr02-aJ-F2s6KyVEuAOC0ctGYmsQqHUvBuuTNoKkbBWkIwcQM7mzmRL_au2i9FbNKkKmJZUkFz_8EM2DYtAqN9gI510mVUoCHu6rsYmcJx68Hnsm',
+        date: 'Oct 12',
+    },
+    {
+        id: '2',
+        name: 'Snake Plant',
+        location: 'Studio',
+        status: 'Thriving',
+        imageUrl:
+            'https://lh3.googleusercontent.com/aida-public/AB6AXuDwMZ5-iPfEbmcYvdk6byMuqtbmo1ti7vWLpuiF3a4Tq6Pz5D5adTj_4lCZfpKTEqtRNhG20xaNF9_Cj96H__UJd1SSDNcA6chQStLovwISAfwfloc_AhlZ0BVDabldW-zgkXekCGQKaA3N4TEFxM3QU3-vZqoR4cPvoDTYaC8qr2SjSRvP63093dMXJuh7uL7-QUPqa3G-we8knVl8aGGklI0G6MgUKvPiwRMx7ZLJz7pvNXoJMBui3g1RWhHR0i1OoXFbhTS2yxL0',
+        date: 'Oct 10',
+    },
+    {
+        id: '3',
+        name: 'Pothos',
+        location: 'Kitchen',
+        status: 'Growing',
+        imageUrl:
+            'https://lh3.googleusercontent.com/aida-public/AB6AXuDXCZ79ybHVPbjVazo_AZ188rvIg_C7gGZrbxWdHyseWIbdU4-3BsNkEvdB3KbKZhYzVyPdHlXFwszTKZiGJWEl9h1jtDYSUi03FUiHwqXjV1TBuLPty-DR3Mv7gEkaPB1y7laBlw0edhxoMWWPT_HkxRlu8CIhg-rCGAzRbdlf6VtjtdukfwCbrn5XMwldUrCGSIj64popLeI3qDmngU5Lw214UGXrFPJGFwCHsrPz476dIhN5zdqYAE04iHHO_HkzP1mEUf6CPsLv',
+        date: 'Oct 08',
+    },
+    {
+        id: '4',
+        name: 'Aloe Vera',
+        location: 'Bedroom',
+        status: 'Stable',
+        imageUrl:
+            'https://lh3.googleusercontent.com/aida-public/AB6AXuDTGPGl26ugebGKfncvy-2knO38jXXes_Kg6LaxUKljtc9--Rd175QXXo5kJgYceZKf0fEQOIZZb1lKGtDdvkOKBIK4ALTxl8Ez3cXS_7krRUNgBYR195m7mIDSyk_RFUbOGJr2r_y_oxSp5yvzB8J4QBso1vf5LS9YuLN3ZKngvYR5dXsRFQFbqsWCm5NCVMxzxIpcU7_XH958c8nG3AMWSUWKVbkn-5P3ma4mDg0S0YycqMkWW8Fdi9CjFbL5mjnekhsp_SSKDiQB',
+        date: 'Oct 05',
+    },
+];
+
+const PLANT_OF_THE_DAY = {
+    name: 'Monstera Deliciosa',
+    nickname: 'The Swiss Cheese Plant',
+    imageUrl:
+        'https://lh3.googleusercontent.com/aida-public/AB6AXuB0HpmncvRHGTqr-rxfirnFCvf9nwWleIvXwrxzQDRD_ptbYOKOGNOxQtoMmpYM7GsCwP_ma1xNLmHXW7qjVvXiUx289Qd2AMucCAozmSANGpsTr6wIRCwGufsCXxMAYXRO9KH4nTlAMv8EPBnyXERqvp44A0lsqpDnrihE4Gz-5gfwCf_diZ2b-WhnpCP9G1eprwWr7WO5XdpLyTfd0jci0Z4EVGnQrAjNhopsmE2r8z_qG5-NPNoKGjVsIgREt2ylHrz8kp_7mCBn',
+};
+
+const USER_AVATAR =
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuA_gfSHcyU5Cx99hvEUqDPAuNaUESaf2I6k1Aa1jLgBHURecaJBBUj_gMjb5B92W_t5AspS_ieXrM3DsVqQTcegBujpzOa_QqKU4YiK3oR74tEX0IqSSsPQw3DTaDDCo3N78GlazoBgN4sQbkYHJUJmp24OWHLYEnTrM2Q4qeBJ_wQxX7N2w2ZMsSQjKnNytHpbw9vhT9AJedEnwU8560bvac-MttDFDedcqMvRIf8YREHCKRzRi8Q8pn08s4465vG2yYuT8ldB6_SS';
+
+export default function Home() {
+    const [activeContentTab, setActiveContentTab] = useState('Collection');
+
+    return (
+        <SafeAreaView className="flex-1 bg-background-light" edges={['top']}>
+            <StatusBar style="dark" />
+
+            <Header
+                userName="Alex"
+                avatarUrl={USER_AVATAR}
+                onBadgePress={() => { }}
+                onSettingsPress={() => { }}
+            />
+
+            <ScrollView
+                className="flex-1"
+                contentContainerStyle={{ paddingBottom: 120 }}
+                showsVerticalScrollIndicator={false}
+            >
+                {/* Plant of the Day */}
+                <View className="p-4">
+                    <PlantOfTheDay
+                        name={PLANT_OF_THE_DAY.name}
+                        nickname={PLANT_OF_THE_DAY.nickname}
+                        imageUrl={PLANT_OF_THE_DAY.imageUrl}
+                        onLearnMore={() => { }}
+                    />
+                </View>
+
+                {/* Tab Selector */}
+                <View className="mt-2">
+                    <TabSelector
+                        tabs={['Collection', 'History']}
+                        activeTab={activeContentTab}
+                        onTabChange={setActiveContentTab}
+                    />
+                </View>
+
+                {/* Plant Collection Grid */}
+                <View className="flex flex-row flex-wrap p-4 gap-4 mt-2">
+                    {PLANTS_DATA.map((plant) => (
+                        <View key={plant.id} style={{ width: '47%' }}>
+                            <PlantCard
+                                name={plant.name}
+                                location={plant.location}
+                                status={plant.status}
+                                imageUrl={plant.imageUrl}
+                                date={plant.date}
+                                onPress={() => { }}
+                            />
+                        </View>
+                    ))}
+                </View>
+            </ScrollView>
+        </SafeAreaView>
+    );
+}
