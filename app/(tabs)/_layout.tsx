@@ -15,6 +15,7 @@ function CustomTabBar({ state }: BottomTabBarProps) {
     };
 
     const handleTabPress = (tab: 'home' | 'scan' | 'explore') => {
+        console.log("==> " + tab)
         switch (tab) {
             case 'home':
                 router.push('/');

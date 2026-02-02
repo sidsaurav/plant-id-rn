@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface NavItemProps {
@@ -10,15 +10,30 @@ interface NavItemProps {
 
 function NavItem({ icon, label, isActive, onPress }: NavItemProps) {
     return (
-        <Pressable onPress={onPress} className="flex flex-col items-center gap-1 pb-1">
+        <TouchableOpacity
+            onPress={onPress}
+            activeOpacity={0.7}
+            style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingVertical: 8,
+            }}
+        >
             <Ionicons name={icon} size={24} color={isActive ? '#37ec13' : '#688961'} />
             <Text
-                className={`text-[11px] font-bold uppercase tracking-wider ${isActive ? 'text-primary' : 'text-text-secondary'
-                    }`}
+                style={{
+                    fontSize: 11,
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase',
+                    letterSpacing: 1,
+                    color: isActive ? '#37ec13' : '#688961',
+                    marginTop: 4,
+                }}
             >
                 {label}
             </Text>
-        </Pressable>
+        </TouchableOpacity>
     );
 }
 
@@ -29,27 +44,36 @@ interface BottomNavBarProps {
 
 export function BottomNavBar({ activeTab, onTabPress }: BottomNavBarProps) {
     return (
-        <View className="absolute bottom-0 left-0 right-0 bg-surface-light/95 border-t border-border-light/50 h-24 pb-8">
-            <View className="flex flex-row justify-around items-end h-full px-4">
+        <View
+            style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                backgroundColor: '#ffffff',
+                borderTopWidth: 1,
+                borderTopColor: 'rgba(0, 0, 0, 0.1)',
+                paddingBottom: 24,
+            }}
+        >
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                }}
+            >
                 <NavItem
                     icon={activeTab === 'home' ? 'home' : 'home-outline'}
                     label="Home"
                     isActive={activeTab === 'home'}
                     onPress={() => onTabPress('home')}
                 />
-                <View className="relative -top-3">
-                    <Pressable
-                        onPress={() => onTabPress('scan')}
-                        className="flex flex-col items-center gap-1"
-                    >
-                        <View className="size-16 rounded-full bg-primary flex items-center justify-center shadow-lg border-4 border-surface-light active:scale-95">
-                            <Ionicons name="camera" size={28} color="#ffffff" />
-                        </View>
-                        <Text className="text-[11px] font-bold uppercase tracking-wider text-text-secondary mt-0.5">
-                            Scan
-                        </Text>
-                    </Pressable>
-                </View>
+                <NavItem
+                    icon={activeTab === 'scan' ? 'camera' : 'camera-outline'}
+                    label="Scan"
+                    isActive={activeTab === 'scan'}
+                    onPress={() => onTabPress('scan')}
+                />
                 <NavItem
                     icon={activeTab === 'explore' ? 'compass' : 'compass-outline'}
                     label="Explore"
