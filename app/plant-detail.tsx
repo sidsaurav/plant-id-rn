@@ -146,7 +146,7 @@ export default function PlantDetail() {
                 <View className="mb-6">
                     <Text className="text-xl font-bold text-text-main mb-3">About</Text>
                     <Text className="text-base text-text-secondary leading-6">
-                        {params.description || 'No description available.'}
+                        {params.description.slice(0, 400) + '...' || 'No description available.'}
                     </Text>
                     {params.wikipediaUrl && (
                         <TouchableOpacity className="flex-row items-center mt-3 gap-1.5" onPress={handleOpenWikipedia}>
