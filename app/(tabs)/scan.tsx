@@ -164,7 +164,7 @@ export default function Scan() {
             console.log("==>base64", base64.substring(0, 10))
             // Call Plant.id API
             const plantData = await identifyPlant(base64);
-
+            console.log("==>plantData", plantData)
             // Stop animation
             cancelAnimation(scanLineProgress);
             scanLineProgress.value = 0;
@@ -175,7 +175,7 @@ export default function Scan() {
                 pathname: '/plant-detail',
                 params: {
                     scientificName: plantData.scientificName,
-                    commonName: plantData.commonName,
+                    commonNames: plantData.commonNames.join(','),
                     probability: plantData.probability.toString(),
                     description: plantData.description,
                     imageUrl: plantData.imageUrl,
@@ -184,8 +184,10 @@ export default function Scan() {
                     genus: plantData.taxonomy.genus,
                     order: plantData.taxonomy.order,
                     wikipediaUrl: plantData.wikipediaUrl,
-                    watering: plantData.watering,
+                    watering: plantData.watering?.label || 'Unknown',
                     synonyms: plantData.synonyms.join(','),
+                    edibleParts: plantData.edibleParts.join(','),
+                    propagationMethods: plantData.propagationMethods.join(','),
                 },
             });
 

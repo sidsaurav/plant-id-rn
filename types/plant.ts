@@ -44,6 +44,8 @@ export interface PlantDetails {
     edible_parts: string[] | null;
     watering: WateringInfo | null;
     propagation_methods: string[] | null;
+    gbif_id: number | null;
+    inaturalist_id: number | null;
 }
 
 export interface PlantTaxonomy {
@@ -74,7 +76,7 @@ export interface WateringInfo {
 export interface PlantData {
     id: string;
     scientificName: string;
-    commonName: string;
+    commonNames: string[];
     probability: number;
     description: string;
     imageUrl: string;
@@ -85,6 +87,14 @@ export interface PlantData {
         order: string;
     };
     wikipediaUrl: string;
-    watering: string;
+    watering: {
+        min: number;
+        max: number;
+        label: string;
+    } | null;
     synonyms: string[];
+    edibleParts: string[];
+    propagationMethods: string[];
+    gbifId: number | null;
+    inaturalistId: number | null;
 }

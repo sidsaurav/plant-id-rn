@@ -10,7 +10,7 @@ export default function PlantDetail() {
 
     const params = useLocalSearchParams<{
         scientificName: string;
-        commonName: string;
+        commonNames: string;
         probability: string;
         description: string;
         imageUrl: string;
@@ -21,11 +21,21 @@ export default function PlantDetail() {
         wikipediaUrl: string;
         watering: string;
         synonyms: string;
+        edibleParts: string;
+        propagationMethods: string;
     }>();
 
     const probability = parseFloat(params.probability || '0');
     const confidencePercent = Math.round(probability * 100);
+    const commonNames = params.commonNames ? params.commonNames.split(',').filter(Boolean) : [];
     const synonyms = params.synonyms ? params.synonyms.split(',').filter(Boolean) : [];
+    const edibleParts = params.edibleParts ? params.edibleParts.split(',').filter(Boolean) : [];
+    const propagationMethods = params.propagationMethods ? params.propagationMethods.split(',').filter(Boolean) : [];
+
+    // Display name is the first common name, or scientific name if no common names
+    const displayName = commonNames[0] || params.scientificName || 'Unknown';
+    // "Also known as" shows remaining common names (skip the first one used as display name)
+    const alsoKnownAs = commonNames.slice(1);
 
     const handleOpenWikipedia = () => {
         if (params.wikipediaUrl) {
@@ -38,6 +48,16 @@ export default function PlantDetail() {
     };
 
     const displayImage = params.capturedImageUri || params.imageUrl;
+
+    // Format propagation methods for display
+    const formatPropagationMethod = (method: string) => {
+        return method.charAt(0).toUpperCase() + method.slice(1);
+    };
+
+    // Format edible parts for display
+    const formatEdiblePart = (part: string) => {
+        return part.charAt(0).toUpperCase() + part.slice(1);
+    };
 
     return (
         <View style={styles.container}>
@@ -70,7 +90,7 @@ export default function PlantDetail() {
 
                 {/* Plant Name Overlay */}
                 <View style={styles.nameOverlay}>
-                    <Text style={styles.commonName}>{params.commonName || 'Unknown'}</Text>
+                    <Text style={styles.commonName}>{displayName}</Text>
                     <Text style={styles.scientificName}>{params.scientificName || 'Unknown'}</Text>
                 </View>
             </View>
@@ -109,6 +129,50 @@ export default function PlantDetail() {
                     )}
                 </View>
 
+                {/* Also Known As Section (Common Names) */}
+                {alsoKnownAs.length > 0 && (
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Also Known As</Text>
+                        <View style={styles.tagsContainer}>
+                            {alsoKnownAs.slice(0, 6).map((name, index) => (
+                                <View key={index} style={styles.tagChip}>
+                                    <Text style={styles.tagText}>{name}</Text>
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                )}
+
+                {/* Edible Parts Section */}
+                {edibleParts.length > 0 && (
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Edible Parts</Text>
+                        <View style={styles.tagsContainer}>
+                            {edibleParts.map((part, index) => (
+                                <View key={index} style={[styles.tagChip, styles.edibleChip]}>
+                                    <Ionicons name="restaurant-outline" size={14} color="#4ade80" />
+                                    <Text style={[styles.tagText, styles.edibleText]}>{formatEdiblePart(part)}</Text>
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                )}
+
+                {/* Propagation Methods Section */}
+                {propagationMethods.length > 0 && (
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Propagation Methods</Text>
+                        <View style={styles.tagsContainer}>
+                            {propagationMethods.map((method, index) => (
+                                <View key={index} style={[styles.tagChip, styles.propagationChip]}>
+                                    <Ionicons name="cut-outline" size={14} color="#60a5fa" />
+                                    <Text style={[styles.tagText, styles.propagationText]}>{formatPropagationMethod(method)}</Text>
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                )}
+
                 {/* Taxonomy Section */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Taxonomy</Text>
@@ -128,10 +192,10 @@ export default function PlantDetail() {
                     </View>
                 </View>
 
-                {/* Synonyms Section */}
+                {/* Scientific Synonyms Section */}
                 {synonyms.length > 0 && (
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Also Known As</Text>
+                        <Text style={styles.sectionTitle}>Scientific Synonyms</Text>
                         <View style={styles.synonymsContainer}>
                             {synonyms.slice(0, 5).map((synonym, index) => (
                                 <View key={index} style={styles.synonymChip}>
@@ -313,5 +377,39 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: 'rgba(255,255,255,0.7)',
         fontStyle: 'italic',
+    },
+    tagsContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 8,
+    },
+    tagChip: {
+        backgroundColor: 'rgba(255,255,255,0.1)',
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+    },
+    tagText: {
+        fontSize: 13,
+        color: 'rgba(255,255,255,0.8)',
+    },
+    edibleChip: {
+        backgroundColor: 'rgba(74, 222, 128, 0.15)',
+        borderWidth: 1,
+        borderColor: 'rgba(74, 222, 128, 0.3)',
+    },
+    edibleText: {
+        color: '#4ade80',
+    },
+    propagationChip: {
+        backgroundColor: 'rgba(96, 165, 250, 0.15)',
+        borderWidth: 1,
+        borderColor: 'rgba(96, 165, 250, 0.3)',
+    },
+    propagationText: {
+        color: '#60a5fa',
     },
 });

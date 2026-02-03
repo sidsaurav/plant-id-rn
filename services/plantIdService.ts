@@ -3,7 +3,7 @@ import { PlantIdentificationResponse, PlantData } from '../types/plant';
 const API_URL = 'https://plant.id/api/v3/identification';
 const API_KEY = process.env.EXPO_PUBLIC_PLANT_ID_API_KEY || '';
 
-const DETAILS_PARAMS = 'common_names,url,description,taxonomy,rank,image,synonyms,watering';
+const DETAILS_PARAMS = 'common_names,url,description,taxonomy,rank,image,synonyms,watering,gbif_id,inaturalist_id,edible_parts,propagation_methods';
 
 export class PlantIdError extends Error {
     constructor(
@@ -61,7 +61,7 @@ export async function identifyPlant(imageBase64: string): Promise<PlantData> {
         }
 
         const data: PlantIdentificationResponse = await response.json();
-        console.log("==>data", data)
+        console.log("==>data", JSON.stringify(data))
 
         if (data.status !== 'COMPLETED') {
             throw new PlantIdError('Identification failed. Please try again.', 500, 'SERVER_ERROR');
@@ -80,11 +80,18 @@ export async function identifyPlant(imageBase64: string): Promise<PlantData> {
         const topSuggestion = suggestions[0];
         const details = topSuggestion.details;
 
+        // Helper function to convert watering level to label
+        const getWateringLabel = (min: number, max: number): string => {
+            const labels: Record<number, string> = { 1: 'Dry', 2: 'Medium', 3: 'Wet' };
+            if (min === max) return labels[min] || 'Unknown';
+            return `${labels[min] || 'Unknown'} to ${labels[max] || 'Unknown'}`;
+        };
+
         // Transform to PlantData with "Unknown" fallbacks
         const plantData: PlantData = {
             id: topSuggestion.id,
             scientificName: topSuggestion.name || 'Unknown',
-            commonName: details.common_names?.[0] || 'Unknown',
+            commonNames: details.common_names || [],
             probability: topSuggestion.probability,
             description: details.description?.value || 'No description available.',
             imageUrl: details.image?.value || topSuggestion.similar_images?.[0]?.url || '',
@@ -96,9 +103,17 @@ export async function identifyPlant(imageBase64: string): Promise<PlantData> {
             },
             wikipediaUrl: details.url || '',
             watering: details.watering
-                ? `${details.watering.min}-${details.watering.max} days`
-                : 'Unknown',
+                ? {
+                    min: details.watering.min,
+                    max: details.watering.max,
+                    label: getWateringLabel(details.watering.min, details.watering.max),
+                }
+                : null,
             synonyms: details.synonyms || [],
+            edibleParts: details.edible_parts || [],
+            propagationMethods: details.propagation_methods || [],
+            gbifId: details.gbif_id || null,
+            inaturalistId: details.inaturalist_id || null,
         };
 
         return plantData;
