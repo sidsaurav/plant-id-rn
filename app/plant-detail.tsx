@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, Linking } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity, Dimensions, Linking, Share } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -47,6 +47,17 @@ export default function PlantDetail() {
         router.back();
     };
 
+    const handleShare = async () => {
+        try {
+            await Share.share({
+                message: `Check out this plant I found: ${displayName} (${params.scientificName})`,
+                url: params.wikipediaUrl || '',
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const displayImage = params.capturedImageUri || params.imageUrl;
 
     // Format propagation methods for display
@@ -60,83 +71,99 @@ export default function PlantDetail() {
     };
 
     return (
-        <View style={styles.container}>
+        <View className="flex-1 bg-background-light">
             <StatusBar style="light" />
 
-            {/* Hero Image */}
-            <View style={styles.heroContainer}>
+            {/* Hero Image Container */}
+            <View className="relative w-full" style={{ height: width * 0.9 }}>
                 {displayImage ? (
-                    <Image source={{ uri: displayImage }} style={styles.heroImage} />
+                    <Image
+                        source={{ uri: displayImage }}
+                        className="w-full h-full"
+                        resizeMode="cover"
+                    />
                 ) : (
-                    <View style={[styles.heroImage, styles.placeholderImage]}>
-                        <Ionicons name="leaf" size={80} color="rgba(55, 236, 19, 0.3)" />
+                    <View className="w-full h-full bg-surface-dark items-center justify-center">
+                        <Ionicons name="leaf" size={80} color="rgba(45, 106, 79, 0.3)" />
                     </View>
                 )}
                 <LinearGradient
-                    colors={['transparent', 'rgba(0,0,0,0.8)']}
-                    style={styles.heroGradient}
+                    colors={['transparent', 'rgba(0,0,0,0.7)']}
+                    className="absolute bottom-0 left-0 right-0 h-1/2"
                 />
 
                 {/* Back Button */}
-                <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
+                <TouchableOpacity
+                    className="absolute top-12 left-5 w-11 h-11 rounded-full bg-black/30 items-center justify-center backdrop-blur-md"
+                    onPress={handleGoBack}
+                >
                     <Ionicons name="arrow-back" size={24} color="#fff" />
                 </TouchableOpacity>
 
+                {/* Share Button (Optional addition) */}
+                <TouchableOpacity
+                    className="absolute top-12 right-5 w-11 h-11 rounded-full bg-black/30 items-center justify-center backdrop-blur-md"
+                    onPress={handleShare}
+                >
+                    <Ionicons name="share-outline" size={24} color="#fff" />
+                </TouchableOpacity>
+
                 {/* Confidence Badge */}
-                <View style={styles.confidenceBadge}>
-                    <Ionicons name="checkmark-circle" size={16} color="#37ec13" />
-                    <Text style={styles.confidenceText}>{confidencePercent}% Match</Text>
+                <View className="absolute bottom-24 right-5 flex-row items-center bg-black/40 px-3 py-1.5 rounded-full gap-1.5 backdrop-blur-sm">
+                    <Ionicons name="checkmark-circle" size={16} color="#4ade80" />
+                    <Text className="text-white text-sm font-semibold">{confidencePercent}% Match</Text>
                 </View>
 
                 {/* Plant Name Overlay */}
-                <View style={styles.nameOverlay}>
-                    <Text style={styles.commonName}>{displayName}</Text>
-                    <Text style={styles.scientificName}>{params.scientificName || 'Unknown'}</Text>
+                <View className="absolute bottom-5 left-5 right-5">
+                    <Text className="text-3xl font-bold text-white capitalize shadow-sm">{displayName}</Text>
+                    <Text className="text-lg text-white/80 italic mt-1 font-medium">{params.scientificName || 'Unknown'}</Text>
                 </View>
             </View>
 
-            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+            {/* Content ScrollView */}
+            <ScrollView className="flex-1 px-5 pt-6" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
                 {/* Quick Info Cards */}
-                <View style={styles.quickInfoRow}>
-                    <View style={styles.quickInfoCard}>
-                        <Ionicons name="water" size={24} color="#37ec13" />
-                        <Text style={styles.quickInfoLabel}>Watering</Text>
-                        <Text style={styles.quickInfoValue}>{params.watering || 'Unknown'}</Text>
+                <View className="flex-row gap-3 mb-6">
+                    <View className="flex-1 bg-white p-4 rounded-2xl items-center shadow-sm border border-border-light">
+                        <Ionicons name="water-outline" size={24} color="#2D6A4F" />
+                        <Text className="text-xs text-text-secondary mt-2 font-medium">Watering</Text>
+                        <Text className="text-sm text-text-main font-bold mt-1 text-center capitalize">{params.watering || 'Unknown'}</Text>
                     </View>
-                    <View style={styles.quickInfoCard}>
-                        <Ionicons name="leaf" size={24} color="#37ec13" />
-                        <Text style={styles.quickInfoLabel}>Family</Text>
-                        <Text style={styles.quickInfoValue}>{params.family || 'Unknown'}</Text>
+                    <View className="flex-1 bg-white p-4 rounded-2xl items-center shadow-sm border border-border-light">
+                        <Ionicons name="leaf-outline" size={24} color="#2D6A4F" />
+                        <Text className="text-xs text-text-secondary mt-2 font-medium">Family</Text>
+                        <Text className="text-sm text-text-main font-bold mt-1 text-center" numberOfLines={1}>{params.family || 'Unknown'}</Text>
                     </View>
-                    <View style={styles.quickInfoCard}>
-                        <Ionicons name="git-branch" size={24} color="#37ec13" />
-                        <Text style={styles.quickInfoLabel}>Genus</Text>
-                        <Text style={styles.quickInfoValue}>{params.genus || 'Unknown'}</Text>
+                    <View className="flex-1 bg-white p-4 rounded-2xl items-center shadow-sm border border-border-light">
+                        <Ionicons name="git-branch-outline" size={24} color="#2D6A4F" />
+                        <Text className="text-xs text-text-secondary mt-2 font-medium">Genus</Text>
+                        <Text className="text-sm text-text-main font-bold mt-1 text-center" numberOfLines={1}>{params.genus || 'Unknown'}</Text>
                     </View>
                 </View>
 
                 {/* Description Section */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>About</Text>
-                    <Text style={styles.description}>
+                <View className="mb-6">
+                    <Text className="text-xl font-bold text-text-main mb-3">About</Text>
+                    <Text className="text-base text-text-secondary leading-6">
                         {params.description || 'No description available.'}
                     </Text>
                     {params.wikipediaUrl && (
-                        <TouchableOpacity style={styles.wikiButton} onPress={handleOpenWikipedia}>
-                            <Ionicons name="open-outline" size={16} color="#37ec13" />
-                            <Text style={styles.wikiButtonText}>Read more on Wikipedia</Text>
+                        <TouchableOpacity className="flex-row items-center mt-3 gap-1.5" onPress={handleOpenWikipedia}>
+                            <Text className="text-primary text-sm font-semibold">Read more on Wikipedia</Text>
+                            <Ionicons name="arrow-forward" size={14} color="#2D6A4F" />
                         </TouchableOpacity>
                     )}
                 </View>
 
                 {/* Also Known As Section (Common Names) */}
                 {alsoKnownAs.length > 0 && (
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Also Known As</Text>
-                        <View style={styles.tagsContainer}>
+                    <View className="mb-6">
+                        <Text className="text-xl font-bold text-text-main mb-3">Also Known As</Text>
+                        <View className="flex-row flex-wrap gap-2">
                             {alsoKnownAs.slice(0, 6).map((name, index) => (
-                                <View key={index} style={styles.tagChip}>
-                                    <Text style={styles.tagText}>{name}</Text>
+                                <View key={index} className="bg-white px-3 py-2 rounded-xl border border-border-light shadow-sm">
+                                    <Text className="text-text-secondary text-sm">{name}</Text>
                                 </View>
                             ))}
                         </View>
@@ -144,281 +171,72 @@ export default function PlantDetail() {
                 )}
 
                 {/* Edible Parts Section */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Edible Parts</Text>
-                    <View style={styles.tagsContainer}>
+                <View className="mb-6">
+                    <Text className="text-xl font-bold text-text-main mb-3">Edible Parts</Text>
+                    <View className="flex-row flex-wrap gap-2">
                         {edibleParts.length > 0 ? (
                             edibleParts.map((part, index) => (
-                                <View key={index} style={[styles.tagChip, styles.edibleChip]}>
-                                    <Ionicons name="restaurant-outline" size={14} color="#4ade80" />
-                                    <Text style={[styles.tagText, styles.edibleText]}>{formatEdiblePart(part)}</Text>
+                                <View key={index} className="bg-green-50 px-3 py-2 rounded-xl border border-green-100 flex-row items-center gap-1.5">
+                                    <Ionicons name="restaurant-outline" size={14} color="#2D6A4F" />
+                                    <Text className="text-primary text-sm font-medium">{formatEdiblePart(part)}</Text>
                                 </View>
                             ))
                         ) : (
-                            <Text style={styles.unknownText}>Not Known</Text>
+                            <Text className="text-text-secondary italic">Not Known</Text>
                         )}
                     </View>
                 </View>
 
                 {/* Propagation Methods Section */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Propagation Methods</Text>
-                    <View style={styles.tagsContainer}>
+                <View className="mb-6">
+                    <Text className="text-xl font-bold text-text-main mb-3">Propagation Methods</Text>
+                    <View className="flex-row flex-wrap gap-2">
                         {propagationMethods.length > 0 ? (
                             propagationMethods.map((method, index) => (
-                                <View key={index} style={[styles.tagChip, styles.propagationChip]}>
-                                    <Ionicons name="cut-outline" size={14} color="#60a5fa" />
-                                    <Text style={[styles.tagText, styles.propagationText]}>{formatPropagationMethod(method)}</Text>
+                                <View key={index} className="bg-blue-50 px-3 py-2 rounded-xl border border-blue-100 flex-row items-center gap-1.5">
+                                    <Ionicons name="cut-outline" size={14} color="#2563EB" />
+                                    <Text className="text-blue-600 text-sm font-medium">{formatPropagationMethod(method)}</Text>
                                 </View>
                             ))
                         ) : (
-                            <Text style={styles.unknownText}>Not Known</Text>
+                            <Text className="text-text-secondary italic">Not Known</Text>
                         )}
                     </View>
                 </View>
 
                 {/* Taxonomy Section */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Taxonomy</Text>
-                    <View style={styles.taxonomyGrid}>
-                        <View style={styles.taxonomyItem}>
-                            <Text style={styles.taxonomyLabel}>Order</Text>
-                            <Text style={styles.taxonomyValue}>{params.order || 'Unknown'}</Text>
+                <View className="mb-6">
+                    <Text className="text-xl font-bold text-text-main mb-3">Taxonomy</Text>
+                    <View className="flex-row flex-wrap gap-3">
+                        <View className="w-[30%] bg-surface-light p-3 rounded-xl border border-border-light">
+                            <Text className="text-xs text-text-secondary uppercase tracking-wider mb-1">Order</Text>
+                            <Text className="text-sm text-text-main font-medium">{params.order || 'Unknown'}</Text>
                         </View>
-                        <View style={styles.taxonomyItem}>
-                            <Text style={styles.taxonomyLabel}>Family</Text>
-                            <Text style={styles.taxonomyValue}>{params.family || 'Unknown'}</Text>
+                        <View className="w-[30%] bg-surface-light p-3 rounded-xl border border-border-light">
+                            <Text className="text-xs text-text-secondary uppercase tracking-wider mb-1">Family</Text>
+                            <Text className="text-sm text-text-main font-medium">{params.family || 'Unknown'}</Text>
                         </View>
-                        <View style={styles.taxonomyItem}>
-                            <Text style={styles.taxonomyLabel}>Genus</Text>
-                            <Text style={styles.taxonomyValue}>{params.genus || 'Unknown'}</Text>
+                        <View className="w-[30%] bg-surface-light p-3 rounded-xl border border-border-light">
+                            <Text className="text-xs text-text-secondary uppercase tracking-wider mb-1">Genus</Text>
+                            <Text className="text-sm text-text-main font-medium">{params.genus || 'Unknown'}</Text>
                         </View>
                     </View>
                 </View>
 
                 {/* Scientific Synonyms Section */}
                 {synonyms.length > 0 && (
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Scientific Synonyms</Text>
-                        <View style={styles.synonymsContainer}>
+                    <View className="mb-8">
+                        <Text className="text-xl font-bold text-text-main mb-3">Scientific Synonyms</Text>
+                        <View className="flex-row flex-wrap gap-2">
                             {synonyms.slice(0, 5).map((synonym, index) => (
-                                <View key={index} style={styles.synonymChip}>
-                                    <Text style={styles.synonymText}>{synonym}</Text>
+                                <View key={index} className="bg-surface-light px-3 py-1.5 rounded-lg border border-border-light">
+                                    <Text className="text-text-secondary text-sm italic">{synonym}</Text>
                                 </View>
                             ))}
                         </View>
                     </View>
                 )}
-
-                {/* Bottom Spacing */}
-                <View style={{ height: 40 }} />
             </ScrollView>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#0a1a0a',
-    },
-    heroContainer: {
-        height: width * 0.9,
-        position: 'relative',
-    },
-    heroImage: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-    },
-    placeholderImage: {
-        backgroundColor: '#1a2a1a',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    heroGradient: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '50%',
-    },
-    backButton: {
-        position: 'absolute',
-        top: 50,
-        left: 20,
-        width: 44,
-        height: 44,
-        borderRadius: 22,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    confidenceBadge: {
-        position: 'absolute',
-        top: 50,
-        right: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.6)',
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 20,
-        gap: 6,
-    },
-    confidenceText: {
-        color: '#37ec13',
-        fontSize: 14,
-        fontWeight: '600',
-    },
-    nameOverlay: {
-        position: 'absolute',
-        bottom: 20,
-        left: 20,
-        right: 20,
-    },
-    commonName: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: '#fff',
-        textTransform: 'capitalize',
-    },
-    scientificName: {
-        fontSize: 18,
-        color: 'rgba(255,255,255,0.7)',
-        fontStyle: 'italic',
-        marginTop: 4,
-    },
-    content: {
-        flex: 1,
-        paddingHorizontal: 20,
-        paddingTop: 20,
-    },
-    quickInfoRow: {
-        flexDirection: 'row',
-        gap: 12,
-        marginBottom: 24,
-    },
-    quickInfoCard: {
-        flex: 1,
-        backgroundColor: 'rgba(55, 236, 19, 0.1)',
-        borderRadius: 16,
-        padding: 16,
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'rgba(55, 236, 19, 0.2)',
-    },
-    quickInfoLabel: {
-        fontSize: 12,
-        color: 'rgba(255,255,255,0.6)',
-        marginTop: 8,
-    },
-    quickInfoValue: {
-        fontSize: 14,
-        color: '#fff',
-        fontWeight: '600',
-        marginTop: 4,
-        textAlign: 'center',
-    },
-    section: {
-        marginBottom: 24,
-    },
-    sectionTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#fff',
-        marginBottom: 12,
-    },
-    description: {
-        fontSize: 16,
-        color: 'rgba(255,255,255,0.8)',
-        lineHeight: 24,
-    },
-    wikiButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 12,
-        gap: 6,
-    },
-    wikiButtonText: {
-        color: '#37ec13',
-        fontSize: 14,
-        fontWeight: '500',
-    },
-    taxonomyGrid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 12,
-    },
-    taxonomyItem: {
-        width: '30%',
-        backgroundColor: 'rgba(255,255,255,0.05)',
-        borderRadius: 12,
-        padding: 12,
-    },
-    taxonomyLabel: {
-        fontSize: 12,
-        color: 'rgba(255,255,255,0.5)',
-    },
-    taxonomyValue: {
-        fontSize: 14,
-        color: '#fff',
-        fontWeight: '500',
-        marginTop: 4,
-    },
-    synonymsContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 8,
-    },
-    synonymChip: {
-        backgroundColor: 'rgba(255,255,255,0.1)',
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 16,
-    },
-    synonymText: {
-        fontSize: 13,
-        color: 'rgba(255,255,255,0.7)',
-        fontStyle: 'italic',
-    },
-    tagsContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 8,
-    },
-    tagChip: {
-        backgroundColor: 'rgba(255,255,255,0.1)',
-        paddingHorizontal: 12,
-        paddingVertical: 8,
-        borderRadius: 16,
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 6,
-    },
-    tagText: {
-        fontSize: 13,
-        color: 'rgba(255,255,255,0.8)',
-    },
-    edibleChip: {
-        backgroundColor: 'rgba(74, 222, 128, 0.15)',
-        borderWidth: 1,
-        borderColor: 'rgba(74, 222, 128, 0.3)',
-    },
-    edibleText: {
-        color: '#4ade80',
-    },
-    propagationChip: {
-        backgroundColor: 'rgba(96, 165, 250, 0.15)',
-        borderWidth: 1,
-        borderColor: 'rgba(96, 165, 250, 0.3)',
-    },
-    propagationText: {
-        color: '#60a5fa',
-    },
-    unknownText: {
-        fontSize: 14,
-        color: 'rgba(255,255,255,0.5)',
-        fontStyle: 'italic',
-    },
-});

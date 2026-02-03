@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Image, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { memo, useCallback } from 'react';
 
@@ -7,7 +7,7 @@ interface PlantCardProps {
     name: string;
     /** Plant image URL or local URI */
     imageUrl: string;
-    /** Date string to display (e.g., "Oct 12" or "Feb 03") */
+    /** Date string to display (e.g., "Watered Feb 03") */
     date: string;
     /** Whether this plant is in the user's favorites/collection */
     isFavorite?: boolean;
@@ -34,82 +34,37 @@ export const PlantCard = memo(function PlantCard({
     }, [onFavoriteToggle]);
 
     return (
-        <Pressable onPress={onPress} style={styles.container}>
-            <View style={styles.imageContainer}>
+        <Pressable
+            onPress={onPress}
+            className="bg-card-accent p-3 rounded-2xl border border-white/60 shadow-sm active:scale-[0.98]"
+        >
+            {/* Image container */}
+            <View className="relative aspect-square rounded-xl overflow-hidden mb-3">
                 <Image
                     source={{ uri: imageUrl }}
-                    style={styles.image}
+                    className="w-full h-full"
                     resizeMode="cover"
                 />
-                {/* Heart icon at top right */}
+                {/* Heart button */}
                 <Pressable
                     onPress={handleFavoritePress}
-                    style={styles.heartButton}
                     hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 items-center justify-center shadow-sm"
                 >
                     <Ionicons
                         name={isFavorite ? 'heart' : 'heart-outline'}
-                        size={22}
-                        color={isFavorite ? '#ef4444' : '#ffffff'}
+                        size={16}
+                        color={isFavorite ? '#f43f5e' : '#4A5D54'}
                     />
                 </Pressable>
             </View>
-            <View style={styles.infoContainer}>
-                <Text style={styles.name} numberOfLines={1}>
-                    {name}
-                </Text>
-                <Text style={styles.date}>{date}</Text>
-            </View>
+            {/* Info */}
+            <Text className="font-bold text-sm text-text-main" numberOfLines={1}>
+                {name}
+            </Text>
+            <Text className="text-[10px] text-text-secondary font-bold uppercase tracking-tight mt-0.5">
+                Watered {date}
+            </Text>
         </Pressable>
     );
-});
-
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'column',
-        gap: 8,
-    },
-    imageContainer: {
-        position: 'relative',
-        width: '100%',
-        aspectRatio: 1,
-        backgroundColor: '#ffffff',
-        padding: 4,
-        borderRadius: 12,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 2,
-    },
-    image: {
-        width: '100%',
-        height: '100%',
-        borderRadius: 10,
-    },
-    heartButton: {
-        position: 'absolute',
-        top: 10,
-        right: 10,
-        width: 32,
-        height: 32,
-        borderRadius: 16,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    infoContainer: {
-        paddingHorizontal: 4,
-    },
-    name: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        color: '#121811',
-        lineHeight: 18,
-    },
-    date: {
-        fontSize: 12,
-        color: '#688961',
-        marginTop: 2,
-    },
 });

@@ -5,18 +5,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#37ec13',
+        primary: '#2D6A4F',
+        'brand-green': '#1B4332',
         background: {
-          light: '#f6f8f6',
+          light: '#F9F8F3',
           dark: '#132210',
         },
+        'earthy-sage': '#E7EBE0',
+        'card-accent': '#F1F2EE',
         surface: {
           light: '#ffffff',
           dark: '#1e311a',
         },
         text: {
-          primary: '#121811',
-          secondary: '#688961',
+          main: '#1B4332',
+          secondary: '#4A5D54',
         },
         border: {
           light: '#dde6db',
@@ -25,6 +28,10 @@ module.exports = {
       },
       fontFamily: {
         display: ['Plus Jakarta Sans', 'sans-serif'],
+      },
+      borderRadius: {
+        '2xl': '1rem',
+        '3xl': '1.5rem',
       },
     },
   },

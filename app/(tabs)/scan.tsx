@@ -258,12 +258,10 @@ export default function Scan() {
     // Permission not determined yet
     if (!permission) {
         return (
-            <View style={styles.container}>
-                <StatusBar style="light" />
-                <View style={styles.loadingContainer}>
-                    <Ionicons name="camera" size={48} color="#37ec13" />
-                    <Text style={styles.loadingText}>Initializing camera...</Text>
-                </View>
+            <View className="flex-1 bg-background-light justify-center items-center gap-4">
+                <StatusBar style="dark" />
+                <ActivityIndicator size="large" color="#2D6A4F" />
+                <Text className="text-text-main text-base font-medium">Initializing camera...</Text>
             </View>
         );
     }
@@ -282,35 +280,36 @@ export default function Scan() {
         };
 
         return (
-            <View style={styles.container}>
-                <StatusBar style="light" />
-                <View style={styles.permissionContainer}>
-                    <View style={styles.permissionIcon}>
-                        <Ionicons name="camera-outline" size={64} color="#37ec13" />
-                    </View>
-                    <Text style={styles.permissionTitle}>Camera Access Required</Text>
-                    <Text style={styles.permissionText}>
-                        {canAskAgain
-                            ? 'We need camera access to identify plants. Your photos are processed locally and never stored.'
-                            : 'Camera access was denied. Please enable it in your device settings to use plant scanning.'}
-                    </Text>
-                    <TouchableOpacity style={styles.permissionButton} onPress={handlePermissionRequest}>
-                        <Ionicons
-                            name={canAskAgain ? 'camera' : 'settings-outline'}
-                            size={20}
-                            color="#000"
-                            style={{ marginRight: 8 }}
-                        />
-                        <Text style={styles.permissionButtonText}>
-                            {canAskAgain ? 'Grant Camera Access' : 'Open Settings'}
-                        </Text>
-                    </TouchableOpacity>
-                    {!canAskAgain && (
-                        <Text style={styles.settingsHint}>
-                            Go to Settings → {Platform.OS === 'ios' ? 'Privacy → Camera' : 'App Permissions → Camera'}
-                        </Text>
-                    )}
+            <View className="flex-1 bg-background-light justify-center items-center p-8">
+                <StatusBar style="dark" />
+                <View className="w-32 h-32 rounded-full bg-brand-green/10 items-center justify-center mb-6">
+                    <Ionicons name="camera-outline" size={64} color="#2D6A4F" />
                 </View>
+                <Text className="text-text-main text-2xl font-bold mb-3 text-center">Camera Access Required</Text>
+                <Text className="text-text-secondary text-base text-center mb-8 leading-6">
+                    {canAskAgain
+                        ? 'We need camera access to identify plants. Your photos are processed locally and never stored.'
+                        : 'Camera access was denied. Please enable it in your device settings to use plant scanning.'}
+                </Text>
+                <TouchableOpacity
+                    className="bg-primary px-8 py-4 rounded-full flex-row items-center gap-2 active:opacity-90 shadow-md"
+                    onPress={handlePermissionRequest}
+                >
+                    <Ionicons
+                        name={canAskAgain ? 'camera' : 'settings-outline'}
+                        size={20}
+                        color="#fff"
+                        style={{ marginRight: 8 }}
+                    />
+                    <Text className="text-white text-base font-bold">
+                        {canAskAgain ? 'Grant Camera Access' : 'Open Settings'}
+                    </Text>
+                </TouchableOpacity>
+                {!canAskAgain && (
+                    <Text className="text-text-secondary/60 text-xs text-center mt-6">
+                        Go to Settings → {Platform.OS === 'ios' ? 'Privacy → Camera' : 'App Permissions → Camera'}
+                    </Text>
+                )}
             </View>
         );
     }

@@ -13,23 +13,12 @@ function NavItem({ icon, label, isActive, onPress }: NavItemProps) {
         <TouchableOpacity
             onPress={onPress}
             activeOpacity={0.7}
-            style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                paddingVertical: 8,
-            }}
+            className="flex-1 items-center justify-center py-2"
         >
-            <Ionicons name={icon} size={24} color={isActive ? '#37ec13' : '#688961'} />
+            <Ionicons name={icon} size={24} color={isActive ? '#2D6A4F' : '#4A5D54'} />
             <Text
-                style={{
-                    fontSize: 11,
-                    fontWeight: 'bold',
-                    textTransform: 'uppercase',
-                    letterSpacing: 1,
-                    color: isActive ? '#37ec13' : '#688961',
-                    marginTop: 4,
-                }}
+                className={`text-[10px] font-bold uppercase mt-1 ${isActive ? 'text-primary' : 'text-text-secondary'
+                    }`}
             >
                 {label}
             </Text>
@@ -44,36 +33,31 @@ interface BottomNavBarProps {
 
 export function BottomNavBar({ activeTab, onTabPress }: BottomNavBarProps) {
     return (
-        <View
-            style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                backgroundColor: '#ffffff',
-                borderTopWidth: 1,
-                borderTopColor: 'rgba(0, 0, 0, 0.1)',
-                paddingBottom: 24,
-            }}
-        >
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                }}
-            >
+        <View className="absolute bottom-0 left-0 right-0 bg-background-light/90 border-t border-black/5 px-8 py-4">
+            <View className="flex-row items-center justify-between">
+                {/* Home */}
                 <NavItem
                     icon={activeTab === 'home' ? 'home' : 'home-outline'}
                     label="Home"
                     isActive={activeTab === 'home'}
                     onPress={() => onTabPress('home')}
                 />
-                <NavItem
-                    icon={activeTab === 'scan' ? 'camera' : 'camera-outline'}
-                    label="Scan"
-                    isActive={activeTab === 'scan'}
-                    onPress={() => onTabPress('scan')}
-                />
+
+                {/* Scan - Elevated button */}
+                <View className="items-center -mt-8">
+                    <TouchableOpacity
+                        onPress={() => onTabPress('scan')}
+                        activeOpacity={0.95}
+                        className="w-14 h-14 bg-brand-green rounded-full items-center justify-center shadow-lg border-4 border-background-light"
+                    >
+                        <Ionicons name="camera" size={24} color="#ffffff" />
+                    </TouchableOpacity>
+                    <Text className="text-[10px] font-bold text-text-secondary mt-1 uppercase">
+                        Scan
+                    </Text>
+                </View>
+
+                {/* Explore */}
                 <NavItem
                     icon={activeTab === 'explore' ? 'compass' : 'compass-outline'}
                     label="Explore"
@@ -81,6 +65,9 @@ export function BottomNavBar({ activeTab, onTabPress }: BottomNavBarProps) {
                     onPress={() => onTabPress('explore')}
                 />
             </View>
+
+            {/* Home indicator bar */}
+            <View className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-brand-green/20 rounded-full" />
         </View>
     );
 }

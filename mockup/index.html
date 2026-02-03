@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Plant Care Home Screen</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#2D6A4F",
+                        "brand-green": "#1B4332",
+                        "background-light": "#F9F8F3", // Soft warm off-white/cream
+                        "earthy-sage": "#E7EBE0", // Pale sage for the featured card
+                        "card-accent": "#F1F2EE", // Subtle green-grey for grid cards
+                        "text-main-light": "#1B4332", // Deep forest green
+                        "text-secondary-light": "#4A5D54", // Muted forest grey
+                    },
+                    fontFamily: {
+                        display: ["Plus Jakarta Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        'xl': "1.5rem",
+                        '2xl': "2rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <style type="text/tailwindcss">
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        :root {
+            --ios-bg: #F9F8F3;
+            --featured-card: #E7EBE0;
+            --grid-card: #F1F2EE;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light text-text-main-light min-h-screen pb-24">
+    <div class="h-12 w-full"></div>
+    <header class="px-6 flex items-center justify-between mb-8">
+        <div class="flex items-center gap-3">
+            <div class="relative">
+                <img alt="User Profile" class="w-12 h-12 rounded-full border-2 border-primary object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv2mKsbWtCpqHW2cMmUREly-0z9MEetDi4yttK2WzG_MHKJkVxbHg4JjlCg1MdleDo1VTsGCqG3mnU739j0K-YjZccVigURDZVrSYUDZVyhj9dwmDc8yla60pvtGekcRqjUty2APK5fMT6zXkxJFu7x--kb3B2KDLMwoyApfuah1HC0aH0mnb9-0WIll5uQQhiX2Jo3mwQrHBerLD68ezDJa1EUdFyy9gc-j4eilYOmurvZp3n-c1ley0SHa5_u5Mq1a2pQi6YiFw" />
+                <div class="absolute bottom-0 right-0 w-3 h-3 bg-primary border-2 border-background-light rounded-full">
+                </div>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-text-secondary-light/80 uppercase tracking-wider">Good Morning,</p>
+                <h1 class="text-xl font-bold text-text-main-light">Alex 🌿</h1>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <button
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm shadow-sm border border-black/5">
+                <span class="material-symbols-outlined text-xl text-text-main-light">notifications</span>
+            </button>
+            <button
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm shadow-sm border border-black/5">
+                <span class="material-symbols-outlined text-xl text-text-main-light">settings</span>
+            </button>
+        </div>
+    </header>
+    <section class="px-6 mb-8">
+        <div class="bg-earthy-sage rounded-2xl overflow-hidden shadow-xl shadow-brand-green/5 border border-white/40">
+            <div class="relative h-56 overflow-hidden">
+                <img alt="Monstera Deliciosa" class="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuARam2PDPxrVROCWds2bha2dbcuaOiet_LdZiMX7zg19ncdeQO6CngzJlN7lnt_h4aXQlWgLF4Z1qC0KXw05Zj1CfyEKQK7XXCk10ZDlAyltq4z8PZmxsqNXB9y-b6UaYQX5861SDK7ivl3hpMz8d6tHx8iSW79J6t0B4KfiR47jKEjiJ8rdOXwunjRZONDr9qmUPr_6CAUnY18zn2FsKrdxRmb2X8MMdY2YnO3zids_pkV3Ye5IfqnxCImUvNSYPl2Nzsu7Ib8hEM" />
+                <div
+                    class="absolute top-4 left-4 bg-white/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/50">
+                    <span class="text-[10px] font-bold tracking-widest text-primary uppercase">Plant of the Day</span>
+                </div>
+            </div>
+            <div class="p-5 flex justify-between items-end">
+                <div>
+                    <h2 class="text-xl font-bold mb-0.5 text-brand-green">Monstera Deliciosa</h2>
+                    <p class="text-sm italic text-text-secondary-light">"The Swiss Cheese Plant"</p>
+                </div>
+                <button
+                    class="bg-primary hover:bg-brand-green text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-primary/20">
+                    Learn More
+                </button>
+            </div>
+        </div>
+    </section>
+    <section class="px-6 mb-6">
+        <div class="flex items-center gap-8 border-b border-black/5">
+            <button class="relative pb-3 text-sm font-bold text-text-main-light">
+                Collection
+                <span class="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-t-full"></span>
+            </button>
+            <button class="pb-3 text-sm font-medium text-text-secondary-light">
+                History
+            </button>
+        </div>
+    </section>
+    <section class="px-6 grid grid-cols-2 gap-4">
+        <div class="bg-card-accent p-3 rounded-2xl border border-white/60 shadow-sm transition-all active:scale-[0.98]">
+            <div class="relative aspect-square rounded-xl overflow-hidden mb-3">
+                <img alt="Devil's Ivy" class="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtrZkSwEcVqOHbSrITVAFhj4IPKjwwhcSHIXQg3Xb_wD-kKbrZH3LJQNxIzkom5hB7ZnkJ-TWTtrmvO5AuuZFqHW9rGb2gNDZq1qY7ak2b8qGeOVbrNkkUYhRMtu9KnpA65AzO3vdYwKNLk10Cn4nEMFQlwqm6xMZOjmT1W4tPCXMIjDPaUoWV2rCfHZE9MGta25_4mVFzJcmIHVIFmvyiwQI1uXYe_6AIXZtwdk1pRr89FHsmpN71sRD3lrAJV_737c-dz2ph_s8" />
+                <button
+                    class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-rose-500 shadow-sm">
+                    <span class="material-symbols-outlined text-base font-variation-fill">favorite</span>
+                </button>
+            </div>
+            <h3 class="font-bold text-sm text-text-main-light">Devil's Ivy</h3>
+            <p class="text-[10px] text-text-secondary-light font-bold uppercase tracking-tight mt-0.5">Watered Feb 03
+            </p>
+        </div>
+        <div class="bg-card-accent p-3 rounded-2xl border border-white/60 shadow-sm transition-all active:scale-[0.98]">
+            <div class="relative aspect-square rounded-xl overflow-hidden mb-3">
+                <img alt="Snake Plant" class="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO79U6VkYIAQjR0OeHE1u5l-ttFR1mOMtavyZ7hpto2iN3dRLXQwjCwmDtuPDzLOo2A3Lyx6jNUP27bNzfBTmxp0BKPec3qBbSxUQbxONvxhMLp6mHdrXBk3wXjLN6sbksUjXLRilnAytgk1Pvsgr5_Qzi82HUVjaA-Uwtt3gdG4rwLDNwb1ldIcXQJGU6ABEu_rzPgFu-5zP3QRdVk5lU0Vy7450hfURaVvJwKJakIEYpQKFUwdrkk5RWz7f-FMUi7GLlNFAnM80" />
+                <button
+                    class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-text-secondary-light/40 shadow-sm">
+                    <span class="material-symbols-outlined text-base">favorite</span>
+                </button>
+            </div>
+            <h3 class="font-bold text-sm text-text-main-light">Snake Plant</h3>
+            <p class="text-[10px] text-text-secondary-light font-bold uppercase tracking-tight mt-0.5">Watered Jan 28
+            </p>
+        </div>
+        <div class="bg-card-accent p-3 rounded-2xl border border-white/60 shadow-sm transition-all active:scale-[0.98]">
+            <div class="relative aspect-square rounded-xl overflow-hidden mb-3">
+                <img alt="Fiddle Leaf Fig" class="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBppkLChS3rg1xcBNPw_FsDaCqfXXq6suOwxXhAGa-VIGypdu06ZHMU7ccRN9ovD7VH7bIGxfdvoG-JI83iTXTD-P9sFqYsUay1axl4bA0NvlawIgBBebqItoD3M7xJdYIE53qx2DtgSRLYO8sliGvjSFUOJ-grtSxKgo_85QUrfMcQGc7_47FrRkboGK2cWJ9UZiezef8sk-RNJQTH_U_5AhuwWUbhUZRlxMUu0cGK74hg7hJws8OKFSCw4awL50SIi4FYwU1jQAQ" />
+                <button
+                    class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-rose-500 shadow-sm">
+                    <span class="material-symbols-outlined text-base font-variation-fill">favorite</span>
+                </button>
+            </div>
+            <h3 class="font-bold text-sm text-text-main-light">Fiddle Leaf Fig</h3>
+            <p class="text-[10px] text-text-secondary-light font-bold uppercase tracking-tight mt-0.5">Watered Feb 01
+            </p>
+        </div>
+        <div class="bg-card-accent p-3 rounded-2xl border border-white/60 shadow-sm transition-all active:scale-[0.98]">
+            <div class="relative aspect-square rounded-xl overflow-hidden mb-3">
+                <img alt="Aloe Vera" class="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEOz9gB94ONr9B0jfrKaceGWwR9oh3qG49uSzAYOoA8mD5ofjgbRvMOATeuM64NhnepIoWLCusOgkrKKOtySIOlBNTJheZAHaXGpT9jEJes1ik27UoqHLAxo0ZmU-uEhBSNYgfgBXrwkGrEzR9tQGiefBtixv40hvMCH_l0fYs2aKCqzuRBF2Cif0wbVG9KtLzEUvckm13J7m-vjEPkoSByHddQHUmfl4DlEtFaLe2Psb2-nCNh7Lg7u4b1lk1jQmYxLtACVYbsfE" />
+                <button
+                    class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-text-secondary-light/40 shadow-sm">
+                    <span class="material-symbols-outlined text-base">favorite</span>
+                </button>
+            </div>
+            <h3 class="font-bold text-sm text-text-main-light">Aloe Vera</h3>
+            <p class="text-[10px] text-text-secondary-light font-bold uppercase tracking-tight mt-0.5">Watered Feb 05
+            </p>
+        </div>
+    </section>
+    <nav
+        class="fixed bottom-0 left-0 right-0 bg-background-light/90 backdrop-blur-xl border-t border-black/5 px-8 py-4 flex justify-between items-center z-50">
+        <button class="flex flex-col items-center gap-1">
+            <span class="material-symbols-outlined text-primary font-variation-fill">home</span>
+            <span class="text-[10px] font-bold text-primary">HOME</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 translate-y-[-12px]">
+            <div
+                class="w-14 h-14 bg-brand-green text-white rounded-full flex items-center justify-center shadow-lg shadow-brand-green/30 active:scale-95 transition-transform border-4 border-background-light">
+                <span class="material-symbols-outlined text-2xl">photo_camera</span>
+            </div>
+            <span class="text-[10px] font-bold text-text-secondary-light mt-0.5">SCAN</span>
+        </button>
+        <button class="flex flex-col items-center gap-1">
+            <span class="material-symbols-outlined text-text-secondary-light">explore</span>
+            <span class="text-[10px] font-bold text-text-secondary-light">EXPLORE</span>
+        </button>
+    </nav>
+    <div class="fixed bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-brand-green/20 rounded-full z-[60]"></div>
+
+</body>
+
+</html>

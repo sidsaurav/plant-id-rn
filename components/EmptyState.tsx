@@ -18,7 +18,7 @@ export function EmptyState({ icon, title, subtitle }: EmptyStateProps) {
     return (
         <View style={styles.container}>
             <View style={styles.iconContainer}>
-                <Ionicons name={icon} size={48} color="#37ec13" />
+                <Ionicons name={icon} size={48} color="#2D6A4F" />
             </View>
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.subtitle}>{subtitle}</Text>
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         width: 96,
         height: 96,
         borderRadius: 48,
-        backgroundColor: 'rgba(55, 236, 19, 0.1)',
+        backgroundColor: 'rgba(45, 106, 79, 0.1)',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 16,
@@ -46,13 +46,13 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#121811',
+        color: '#1B4332',
         textAlign: 'center',
         marginBottom: 8,
     },
     subtitle: {
         fontSize: 14,
-        color: '#688961',
+        color: '#4A5D54',
         textAlign: 'center',
         lineHeight: 20,
     },
