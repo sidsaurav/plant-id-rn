@@ -7,6 +7,11 @@ function CustomTabBar({ state }: BottomTabBarProps) {
     const routeNames = state.routes.map(route => route.name);
     const currentRoute = state.routes[state.index].name;
 
+    // Hide bottom nav bar on scan page
+    if (currentRoute === 'scan') {
+        return null;
+    }
+
     const getActiveTab = (): 'home' | 'scan' | 'explore' => {
         if (currentRoute === 'index') return 'home';
         if (currentRoute === 'scan') return 'scan';
