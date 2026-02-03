@@ -144,34 +144,38 @@ export default function PlantDetail() {
                 )}
 
                 {/* Edible Parts Section */}
-                {edibleParts.length > 0 && (
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Edible Parts</Text>
-                        <View style={styles.tagsContainer}>
-                            {edibleParts.map((part, index) => (
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Edible Parts</Text>
+                    <View style={styles.tagsContainer}>
+                        {edibleParts.length > 0 ? (
+                            edibleParts.map((part, index) => (
                                 <View key={index} style={[styles.tagChip, styles.edibleChip]}>
                                     <Ionicons name="restaurant-outline" size={14} color="#4ade80" />
                                     <Text style={[styles.tagText, styles.edibleText]}>{formatEdiblePart(part)}</Text>
                                 </View>
-                            ))}
-                        </View>
+                            ))
+                        ) : (
+                            <Text style={styles.unknownText}>Not Known</Text>
+                        )}
                     </View>
-                )}
+                </View>
 
                 {/* Propagation Methods Section */}
-                {propagationMethods.length > 0 && (
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Propagation Methods</Text>
-                        <View style={styles.tagsContainer}>
-                            {propagationMethods.map((method, index) => (
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Propagation Methods</Text>
+                    <View style={styles.tagsContainer}>
+                        {propagationMethods.length > 0 ? (
+                            propagationMethods.map((method, index) => (
                                 <View key={index} style={[styles.tagChip, styles.propagationChip]}>
                                     <Ionicons name="cut-outline" size={14} color="#60a5fa" />
                                     <Text style={[styles.tagText, styles.propagationText]}>{formatPropagationMethod(method)}</Text>
                                 </View>
-                            ))}
-                        </View>
+                            ))
+                        ) : (
+                            <Text style={styles.unknownText}>Not Known</Text>
+                        )}
                     </View>
-                )}
+                </View>
 
                 {/* Taxonomy Section */}
                 <View style={styles.section}>
@@ -411,5 +415,10 @@ const styles = StyleSheet.create({
     },
     propagationText: {
         color: '#60a5fa',
+    },
+    unknownText: {
+        fontSize: 14,
+        color: 'rgba(255,255,255,0.5)',
+        fontStyle: 'italic',
     },
 });

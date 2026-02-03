@@ -33,14 +33,11 @@ function getErrorFromStatusCode(statusCode: number): { message: string; type: Pl
 }
 
 export async function identifyPlant(imageBase64: string): Promise<PlantData> {
-    console.log("==>API_KEY", API_KEY)
     if (!API_KEY) {
         throw new PlantIdError('API key not configured', 401, 'UNAUTHORIZED');
     }
 
     const url = `${API_URL}?details=${DETAILS_PARAMS}&language=en`;
-
-    console.log("==>url", url)
 
     try {
         const response = await fetch(url, {
@@ -61,7 +58,6 @@ export async function identifyPlant(imageBase64: string): Promise<PlantData> {
         }
 
         const data: PlantIdentificationResponse = await response.json();
-        console.log("==>data", JSON.stringify(data))
 
         if (data.status !== 'COMPLETED') {
             throw new PlantIdError('Identification failed. Please try again.', 500, 'SERVER_ERROR');

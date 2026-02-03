@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Image, ActivityIndicator, Alert } from 'react-native';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Image, ActivityIndicator, Alert, Linking, Platform, AppState } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import { CameraView, useCameraPermissions } from 'expo-camera';
@@ -18,6 +18,7 @@ import Animated, {
     Easing,
 } from 'react-native-reanimated';
 import { identifyPlant, PlantIdError } from '../../services/plantIdService';
+import { usePlantStore } from '../../store/usePlantStore';
 
 const { width, height } = Dimensions.get('window');
 const VIEWFINDER_SIZE = width * 0.75;
@@ -97,6 +98,21 @@ export default function Scan() {
         }, [startAnimations])
     );
 
+    // Re-check permission when app comes back from Settings
+    useEffect(() => {
+        const subscription = AppState.addEventListener('change', (nextAppState) => {
+            // When app becomes active (returns from background/Settings)
+            if (nextAppState === 'active' && permission && !permission.granted) {
+                // Re-request to refresh the permission status
+                requestPermission();
+            }
+        });
+
+        return () => {
+            subscription.remove();
+        };
+    }, [permission, requestPermission]);
+
 
 
     const toggleFlash = () => {
@@ -105,6 +121,20 @@ export default function Scan() {
 
     const pickImage = async () => {
         if (isCapturing || isScanning) return;
+
+        // Check media library permission first
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert(
+                'Photo Library Access Required',
+                'Please grant access to your photo library to select images for plant identification.',
+                [
+                    { text: 'Cancel', style: 'cancel' },
+                    { text: 'Open Settings', onPress: () => Linking.openSettings() },
+                ]
+            );
+            return;
+        }
 
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ['images'],
@@ -142,7 +172,6 @@ export default function Scan() {
     };
 
     const startScanning = async () => {
-        console.log("==> started")
         if (!capturedImage || isScanning) return;
 
         setIsScanning(true);
@@ -158,13 +187,18 @@ export default function Scan() {
 
         try {
             // Convert image to base64
-            console.log("==> capturedImage", capturedImage)
             const file = new File(capturedImage);
             const base64 = await file.base64();
-            console.log("==>base64", base64.substring(0, 10))
+
             // Call Plant.id API
             const plantData = await identifyPlant(base64);
-            console.log("==>plantData", plantData)
+
+            // Save the captured image URI to the plant data
+            plantData.capturedImageUri = capturedImage;
+
+            // Save to history
+            usePlantStore.getState().addToHistory(plantData);
+
             // Stop animation
             cancelAnimation(scanLineProgress);
             scanLineProgress.value = 0;
@@ -207,14 +241,6 @@ export default function Scan() {
         }
     };
 
-    const handleScanComplete = () => {
-        // This is now handled in startScanning
-        cancelAnimation(scanLineProgress);
-        scanLineProgress.value = 0;
-        setIsScanning(false);
-        setCapturedImage(null);
-    };
-
     const handleRetake = () => {
         if (scanTimeoutRef.current) {
             clearTimeout(scanTimeoutRef.current);
@@ -244,6 +270,17 @@ export default function Scan() {
 
     // Permission denied
     if (!permission.granted) {
+        const canAskAgain = permission.canAskAgain;
+
+        const handlePermissionRequest = async () => {
+            if (canAskAgain) {
+                await requestPermission();
+            } else {
+                // Permission permanently denied - open settings
+                Linking.openSettings();
+            }
+        };
+
         return (
             <View style={styles.container}>
                 <StatusBar style="light" />
@@ -253,11 +290,26 @@ export default function Scan() {
                     </View>
                     <Text style={styles.permissionTitle}>Camera Access Required</Text>
                     <Text style={styles.permissionText}>
-                        We need camera access to identify plants. Your photos are processed locally and never stored.
+                        {canAskAgain
+                            ? 'We need camera access to identify plants. Your photos are processed locally and never stored.'
+                            : 'Camera access was denied. Please enable it in your device settings to use plant scanning.'}
                     </Text>
-                    <TouchableOpacity style={styles.permissionButton} onPress={requestPermission}>
-                        <Text style={styles.permissionButtonText}>Grant Camera Access</Text>
+                    <TouchableOpacity style={styles.permissionButton} onPress={handlePermissionRequest}>
+                        <Ionicons
+                            name={canAskAgain ? 'camera' : 'settings-outline'}
+                            size={20}
+                            color="#000"
+                            style={{ marginRight: 8 }}
+                        />
+                        <Text style={styles.permissionButtonText}>
+                            {canAskAgain ? 'Grant Camera Access' : 'Open Settings'}
+                        </Text>
                     </TouchableOpacity>
+                    {!canAskAgain && (
+                        <Text style={styles.settingsHint}>
+                            Go to Settings → {Platform.OS === 'ios' ? 'Privacy → Camera' : 'App Permissions → Camera'}
+                        </Text>
+                    )}
                 </View>
             </View>
         );
@@ -458,11 +510,19 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         paddingVertical: 16,
         borderRadius: 30,
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     permissionButtonText: {
         color: '#000',
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    settingsHint: {
+        color: 'rgba(255,255,255,0.5)',
+        fontSize: 13,
+        textAlign: 'center',
+        marginTop: 16,
     },
     topGradient: {
         position: 'absolute',
