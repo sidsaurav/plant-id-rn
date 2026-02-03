@@ -4,8 +4,10 @@ import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
+import { File } from 'expo-file-system/next';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect } from '@react-navigation/native';
+import { router } from 'expo-router';
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
@@ -15,6 +17,7 @@ import Animated, {
     cancelAnimation,
     Easing,
 } from 'react-native-reanimated';
+import { identifyPlant, PlantIdError } from '../../services/plantIdService';
 
 const { width, height } = Dimensions.get('window');
 const VIEWFINDER_SIZE = width * 0.75;
@@ -138,12 +141,13 @@ export default function Scan() {
         }
     };
 
-    const startScanning = () => {
+    const startScanning = async () => {
+        console.log("==> started")
         if (!capturedImage || isScanning) return;
 
         setIsScanning(true);
 
-        // Start scan line animation (0 -> 1, repeating)
+        // Start scan line animation
         scanLineProgress.value = withRepeat(
             withSequence(
                 withTiming(1, { duration: 1500, easing: Easing.linear }),
@@ -152,19 +156,59 @@ export default function Scan() {
             -1
         );
 
-        // TODO: Send image to API for identification
-        scanTimeoutRef.current = setTimeout(() => {
-            handleScanComplete();
-        }, 4000);
+        try {
+            // Convert image to base64
+            console.log("==> capturedImage", capturedImage)
+            const file = new File(capturedImage);
+            const base64 = await file.base64();
+            console.log("==>base64", base64.substring(0, 10))
+            // Call Plant.id API
+            const plantData = await identifyPlant(base64);
+
+            // Stop animation
+            cancelAnimation(scanLineProgress);
+            scanLineProgress.value = 0;
+            setIsScanning(false);
+
+            // Navigate to plant detail page
+            router.push({
+                pathname: '/plant-detail',
+                params: {
+                    scientificName: plantData.scientificName,
+                    commonName: plantData.commonName,
+                    probability: plantData.probability.toString(),
+                    description: plantData.description,
+                    imageUrl: plantData.imageUrl,
+                    capturedImageUri: capturedImage,
+                    family: plantData.taxonomy.family,
+                    genus: plantData.taxonomy.genus,
+                    order: plantData.taxonomy.order,
+                    wikipediaUrl: plantData.wikipediaUrl,
+                    watering: plantData.watering,
+                    synonyms: plantData.synonyms.join(','),
+                },
+            });
+
+            setCapturedImage(null);
+        } catch (error) {
+            // Stop animation
+            cancelAnimation(scanLineProgress);
+            scanLineProgress.value = 0;
+            setIsScanning(false);
+
+            // Show error message
+            if (error instanceof PlantIdError) {
+                Alert.alert('Identification Failed', error.message);
+            } else {
+                Alert.alert('Error', 'Something went wrong. Please try again.');
+            }
+        }
     };
 
     const handleScanComplete = () => {
-        scanTimeoutRef.current = null;
-
-        // Stop scan line animation
+        // This is now handled in startScanning
         cancelAnimation(scanLineProgress);
         scanLineProgress.value = 0;
-
         setIsScanning(false);
         setCapturedImage(null);
     };
